@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Modul Interaktif: Ekonomi Islam</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Mengaktifkan dark mode berbasis class
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        islamic: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        },
+                        darkmode: {
+                            bg: '#0f172a',
+                            surface: '#1e293b',
+                            border: '#334155'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CSS Khusus untuk Transisi dan Layout Tanpa Scroll */
+        body { 
+            overflow: hidden; /* Mengunci scroll utama */
+            overscroll-behavior-y: none;
+        }
+        
+        .slide-container {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .slide-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            position: absolute;
+            visibility: hidden;
+            z-index: -1;
+        }
+        
+        .slide-visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Styling Scrollbar Khusus (jika konten dalam slide terlalu panjang) */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 10px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #475569;
+        }
+
+        /* Flowchart lines */
+        .flow-line {
+            width: 2px;
+            height: 30px;
+            background-color: #fbbf24;
+            margin: 0 auto;
+        }
+        .flow-arrow {
+            width: 0; 
+            height: 0; 
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #fbbf24;
+            margin: 0 auto;
+        }
+        
+        /* Quiz Radio Custom */
+        input[type="radio"]:checked + div {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+        }
+        .dark input[type="radio"]:checked + div {
+            background-color: rgba(34, 197, 94, 0.2);
+            border-color: #22c55e;
+            color: #4ade80;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-darkmode-bg text-slate-800 dark:text-slate-100 h-screen w-screen flex flex-col font-sans transition-colors duration-300">
+
+    <!-- Navbar / Controls -->
+    <header class="h-16 w-full flex justify-between items-center px-4 md:px-8 bg-white dark:bg-darkmode-surface shadow-sm border-b border-slate-200 dark:border-darkmode-border z-50 shrink-0 transition-colors duration-300">
+        <div class="font-bold text-islamic-800 dark:text-islamic-500 text-lg md:text-xl flex items-center gap-2">
+            <i class="fa-solid fa-moon text-gold-500"></i> <span class="hidden md:inline">Modul Ekonomi Islam</span><span class="md:hidden">Modul EI</span>
+        </div>
+        <div class="flex items-center gap-2 md:gap-4">
+            <!-- Theme Toggle -->
+            <button id="themeToggle" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-gold-400 hover:bg-slate-200 dark:hover:bg-slate-600 transition play-click" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block"></i>
+            </button>
+            
+            <!-- Sound Toggle -->
+            <button id="soundToggle" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-2 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center gap-2 play-click" onclick="toggleSound()">
+                <i class="fa-solid fa-volume-xmark"></i> <span class="hidden md:inline">Suara Off</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 relative overflow-hidden w-full max-w-6xl mx-auto">
+        
+        <!-- SLIDE 1: Hero -->
+        <section id="slide-0" class="slide-container slide-visible h-full w-full absolute top-0 left-0 p-6 md:p-12 custom-scrollbar overflow-y-auto flex flex-col justify-center items-center text-center">
+            <span class="bg-gold-500/20 text-gold-600 dark:text-gold-400 text-xs md:text-sm font-bold px-4 py-1 rounded-full uppercase tracking-wider mb-6 inline-block border border-gold-400/50">Materi Eksklusif Wawancara</span>
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight text-slate-900 dark:text-white">
+                Ekonomi Islam:<br>Bukan Sekadar Bank Syariah,<br>tetapi <span class="text-transparent bg-clip-text bg-gradient-to-r from-islamic-600 to-islamic-400 dark:from-islamic-400 dark:to-islamic-200">Sistem Kehidupan</span>
+            </h1>
+            <p class="text-base md:text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-2xl mx-auto">
+                Disarikan dari pemikiran <strong>Ustaz Wondro Triono</strong>. Mengupas filsafat, kritik kapitalisme, dan relevansi Ekonomi Islam di dunia modern.
+            </p>
+            <div class="bg-islamic-50 dark:bg-islamic-900/30 border border-islamic-200 dark:border-islamic-800 p-4 rounded-xl max-w-md w-full mb-8 shadow-sm">
+                <p class="text-sm text-islamic-800 dark:text-islamic-200 font-semibold"><i class="fa-solid fa-info-circle mr-2"></i>Gunakan tombol di bawah untuk navigasi materi.</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Peta Pembahasan -->
+        <section id="slide-1" class="slide-container slide-hidden h-full w-full absolute top-0 left-0 p-4 md:p-8 custom-scrollbar overflow-y-auto flex flex-col justify-center">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-islamic-800 dark:text-islamic-400 mb-2"><i class="fa-solid fa-map text-gold-500 mr-2"></i> Peta Besar Pembahasan</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm md:text-base">Kerangka berpikir utama yang dibangun sepanjang diskusi.</p>
+            </div>
+
+            <div class="bg-white dark:bg-darkmode-surface p-6 rounded-2xl shadow-lg border border-slate-200 dark:border-darkmode-border max-w-3xl mx-auto w-full">
+                <div class="text-center">
+                    <div class="bg-slate-800 dark:bg-slate-700 text-white font-bold py-2 px-6 rounded-lg inline-block shadow-md text-sm md:text-base">AQIDAH</div>
+                    <div class="flow-line"></div><div class="flow-arrow mb-2"></div>
+                    <div class="bg-slate-600 dark:bg-slate-500 text-white py-2 px-6 rounded-lg inline-block shadow-md text-sm md:text-base">Cara Pandang Hidup</div>
+                    <div class="flow-line"></div>
+                    
+                    <div class="flex justify-center mb-2">
+                        <div class="w-1/2 border-t-2 border-gold-400"></div>
+                    </div>
+                    
+                    <div class="flex justify-between md:justify-center md:gap-24 w-full">
+                        <div class="text-center w-1/2 md:w-auto">
+                            <div class="flow-arrow mb-2 mx-auto"></div>
+                            <div class="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold py-2 px-3 rounded-lg text-xs md:text-sm border border-slate-200 dark:border-slate-600">Memahami Fakta</div>
+                            <div class="flow-line"></div><div class="flow-arrow mb-2 mx-auto"></div>
+                            <div class="bg-blue-600 text-white font-bold py-2 px-3 rounded-lg text-xs md:text-sm shadow-md">Ilmu Ekonomi</div>
+                            <div class="flow-line"></div><div class="flow-arrow mb-2 mx-auto"></div>
+                            <div class="border-2 border-blue-500 text-blue-700 dark:text-blue-400 py-1 px-3 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-900/30">Diagnosa Sama</div>
+                        </div>
+                        <div class="text-center w-1/2 md:w-auto">
+                            <div class="flow-arrow mb-2 mx-auto"></div>
+                            <div class="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold py-2 px-3 rounded-lg text-xs md:text-sm border border-slate-200 dark:border-slate-600">Menentukan Solusi</div>
+                            <div class="flow-line"></div><div class="flow-arrow mb-2 mx-auto"></div>
+                            <div class="bg-islamic-600 text-white font-bold py-2 px-3 rounded-lg text-xs md:text-sm shadow-md">Sistem Ekonomi</div>
+                            <div class="flow-line"></div><div class="flow-arrow mb-2 mx-auto"></div>
+                            <div class="border-2 border-islamic-500 text-islamic-700 dark:text-islamic-400 py-1 px-3 rounded-full text-xs font-bold bg-islamic-50 dark:bg-islamic-900/30">Solusi Berbeda</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Perjalanan & Filsafat -->
+        <section id="slide-2" class="slide-container slide-hidden h-full w-full absolute top-0 left-0 p-4 md:p-8 custom-scrollbar overflow-y-auto">
+            <div class="grid lg:grid-cols-2 gap-8 h-full items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6 flex items-center"><i class="fa-solid fa-graduation-cap text-gold-500 mr-3"></i> Latar Belakang & Motivasi</h2>
+                    <div class="space-y-4">
+                        <div class="bg-white dark:bg-darkmode-surface p-4 rounded-xl shadow-sm border border-slate-100 dark:border-darkmode-border flex gap-4 items-start">
+                            <div class="bg-slate-100 dark:bg-slate-700 p-3 rounded-lg text-slate-600 dark:text-slate-300"><i class="fa-solid fa-seedling"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 dark:text-slate-100">1. Ilmu Sains (Pertanian)</h4>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Membentuk logika empiris dan pemahaman fakta alam.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-darkmode-surface p-4 rounded-xl shadow-sm border border-slate-100 dark:border-darkmode-border flex gap-4 items-start">
+                            <div class="bg-slate-100 dark:bg-slate-700 p-3 rounded-lg text-slate-600 dark:text-slate-300"><i class="fa-solid fa-chart-pie"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 dark:text-slate-100">2. Ilmu Ekonomi Murni</h4>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Menganalisis sistem kapitalisme secara mendalam (level Doktoral).</p>
+                            </div>
+                        </div>
+                        <div class="bg-islamic-50 dark:bg-islamic-900/20 p-4 rounded-xl shadow-sm border border-islamic-200 dark:border-islamic-800 flex gap-4 items-start">
+                            <div class="bg-islamic-200 dark:bg-islamic-800 p-3 rounded-lg text-islamic-700 dark:text-islamic-400"><i class="fa-solid fa-mosque"></i></div>
+                            <div>
+                                <h4 class="font-bold text-islamic-800 dark:text-islamic-300">3. Ekonomi Islam</h4>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Krisis 1997 memunculkan keyakinan: "Jika Islam sempurna, ia pasti punya solusi runtuhnya ekonomi modern."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-800 dark:bg-slate-800 p-6 rounded-2xl text-white shadow-xl">
+                    <h3 class="text-xl font-bold mb-6 text-gold-400 border-b border-slate-600 pb-2">Landasan Filsafat Ilmu</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold text-lg text-blue-400"><i class="fa-solid fa-cube mr-2"></i> Ontologi</h4>
+                            <p class="text-sm text-slate-300">Apa hakikat masalahnya? Apakah sekadar kelangkaan barang atau ketidakadilan?</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-green-400"><i class="fa-solid fa-microscope mr-2"></i> Epistemologi</h4>
+                            <p class="text-sm text-slate-300">Bagaimana kita menganalisis data, inflasi, dan statistik pasar?</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-purple-400"><i class="fa-solid fa-scale-balanced mr-2"></i> Aksiologi</h4>
+                            <p class="text-sm text-slate-300">Untuk apa ilmu ini digunakan? Siapa yang diuntungkan oleh sebuah kebijakan?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: Ilmu vs Sistem -->
+        <section id="slide-3" class="slide-container slide-hidden h-full w-full absolute top-0 left-0 p-4 md:p-8 custom-scrollbar overflow-y-auto flex flex-col justify-center items-center">
+            <div class="text-center mb-8 max-w-3xl">
+                <span class="text-islamic-600 dark:text-islamic-400 font-bold tracking-widest text-sm mb-2 block uppercase">Perbedaan Krusial</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Ilmu Ekonomi ≠ Sistem Ekonomi</h2>
+                <p class="text-slate-600 dark:text-slate-400">Membaca fakta bisa sama, tetapi cara menyelesaikan masalah (solusi) pasti berbeda tergantung Aqidah / Ideologi.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 w-full max-w-4xl">
+                <!-- Ilmu Card -->
+                <div class="bg-white dark:bg-darkmode-surface rounded-2xl shadow-md border border-slate-200 dark:border-darkmode-border overflow-hidden">
+                    <div class="bg-blue-600 py-3 px-5 text-white flex items-center gap-3">
+                        <i class="fa-solid fa-magnifying-glass-chart text-xl"></i>
+                        <h3 class="text-lg font-bold">Ilmu Ekonomi</h3>
+                    </div>
+                    <div class="p-5">
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mb-4 bg-slate-50 dark:bg-slate-800 p-3 rounded border-l-2 border-blue-500">Mempelajari fakta, data, dan diagnosis masalah. Bersifat universal.</p>
+                        <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-500 mt-1"></i> Muslim & Non-Muslim melihat data yang sama.</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-blue-500 mt-1"></i> Contoh: Menghitung inflasi, deflasi, atau pengangguran.</li>
+                        </ul>
+                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700 text-center font-bold text-blue-700 dark:text-blue-400 text-sm">
+                            DIAGNOSIS BISA SAMA
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sistem Card -->
+                <div class="bg-white dark:bg-darkmode-surface rounded-2xl shadow-md border border-slate-200 dark:border-darkmode-border overflow-hidden">
+                    <div class="bg-islamic-600 py-3 px-5 text-white flex items-center gap-3">
+                        <i class="fa-solid fa-gears text-xl"></i>
+                        <h3 class="text-lg font-bold">Sistem Ekonomi</h3>
+                    </div>
+                    <div class="p-5">
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mb-4 bg-slate-50 dark:bg-slate-800 p-3 rounded border-l-2 border-islamic-500">Menawarkan jalan keluar atau solusi atas fakta yang terjadi.</p>
+                        <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-islamic-500 mt-1"></i> Sangat dipengaruhi oleh Aqidah dan cara pandang hidup.</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-islamic-500 mt-1"></i> Contoh: Kapitalisme (solusi A), Sosialisme (solusi B), Islam (solusi C).</li>
+                        </ul>
+                        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700 text-center font-bold text-islamic-700 dark:text-islamic-400 text-sm">
+                            SOLUSI PASTI BERBEDA
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Produksi vs Distribusi -->
+        <section id="slide-4" class="slide-container slide-hidden h-full w-full absolute top-0 left-0 p-4 md:p-8 custom-scrollbar overflow-y-auto">
+            <div class="flex flex-col md:flex-row h-full gap-6 items-center justify-center">
+                
+                <div class="flex-1 w-full text-center md:text-left">
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Kritik Akar Masalah:<br><span class="text-red-500">Produksi</span> vs <span class="text-islamic-600 dark:text-islamic-400">Distribusi</span></h2>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6">Menurut Kapitalisme, akar masalah adalah kelangkaan (kebutuhan tak terbatas vs sumber daya terbatas), sehingga fokusnya selalu <strong>menaikkan produksi</strong>.</p>
+                    
+                    <div class="bg-islamic-50 dark:bg-islamic-900/30 p-5 rounded-2xl border-l-4 border-islamic-500 shadow-sm mb-6 text-left">
+                        <h4 class="font-bold text-islamic-800 dark:text-islamic-300 mb-2"><i class="fa-solid fa-lightbulb text-gold-500 mr-2"></i>Fokus Islam</h4>
+                        <p class="text-sm text-slate-700 dark:text-slate-300">Dunia mampu berproduksi banyak. Pangan melimpah, tapi kemiskinan dan kelaparan tetap ada karena barang menumpuk pada segelintir orang. Maka, Islam fokus mengatur <strong>Distribusi</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="flex-1 w-full">
+                    <div class="bg-slate-900 dark:bg-darkmode-bg border border-slate-700 p-6 rounded-2xl shadow-xl text-white">
+                        <h4 class="text-gold-400 font-bold mb-4 text-center border-b border-slate-700 pb-2"><i class="fa-solid fa-scale-unbalanced mr-2"></i>Contoh Logika Warisan</h4>
+                        <div class="space-y-4">
+                            <p class="text-sm text-slate-300">Jika orang tua meninggalkan Rp100 juta, bagaimana membaginya secara adil?</p>
+                            <div class="flex flex-col gap-2">
+                                <div class="bg-slate-800 p-2 rounded text-sm text-slate-400 border border-slate-700">Akal A: Bagi rata saja semua anak.</div>
+                                <div class="bg-slate-800 p-2 rounded text-sm text-slate-400 border border-slate-700">Akal B: Yang paling muda butuh lebih banyak.</div>
+                                <div class="bg-slate-800 p-2 rounded text-sm text-slate-400 border border-slate-700">Akal C: Yang paling tua harus lebih banyak.</div>
+                            </div>
+                            <div class="bg-islamic-800 p-3 rounded border border-islamic-600 text-center">
+                                <p class="text-sm font-semibold text-islamic-200">Akal manusia tak pernah selesai mendefinisikan adil. Oleh karena itu, <strong>Syariat turun</strong> untuk menetapkan hukum interaksi (waris, jual beli, larangan riba).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Kepemilikan & Peradaban -->
+        <section id="slide-5" class="slide-container slide-hidden h-full w-full absolute top-0 left-0 p-4 md:p-8 custom-scrollbar overflow-y-auto">
+            <div class="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-full">
+                
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2 text-center">Fondasi Ekonomi Islam</h2>
+                <p class="text-center text-slate-600 dark:text-slate-400 mb-8 text-sm md:text-base">Berbeda dengan sistem lain, Islam membagi struktur <strong>Kepemilikan</strong> menjadi tiga:</p>
+                
+                <div class="grid md:grid-cols-3 gap-4 w-full mb-10">
+                    <div class="bg-white dark:bg-darkmode-surface p-5 rounded-2xl shadow-sm border-t-4 border-green-500 text-center border border-slate-100 dark:border-darkmode-border flex flex-col items-center justify-center">
+                        <div class="w-12 h-12 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-user"></i></div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 mb-1">Individu</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Rumah, kendaraan, hasil usaha sah.</p>
+                    </div>
+                    <div class="bg-white dark:bg-darkmode-surface p-5 rounded-2xl shadow-sm border-t-4 border-blue-500 text-center border border-slate-100 dark:border-darkmode-border flex flex-col items-center justify-center">
+                        <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-earth-asia"></i></div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 mb-1">Umum</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Air, energi, tambang. Tak boleh dimonopoli.</p>
+                    </div>
+                    <div class="bg-white dark:bg-darkmode-surface p-5 rounded-2xl shadow-sm border-t-4 border-purple-500 text-center border border-slate-100 dark:border-darkmode-border flex flex-col items-center justify-center">
+                        <div class="w-12 h-12 bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full flex items-center justify-center text-xl mb-3"><i class="fa-solid fa-building-columns"></i></div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 mb-1">Negara</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Harta yang hak kelolanya ada pada negara untuk publik.</p>
+                    </div>
+                </div>
+
+                <div class="w-full bg-slate-100 dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                    <h3 class="text-lg font-bold text-center mb-4 text-slate-800 dark:text-white">Kesimpulan: 3 Pilar Peradaban Islam</h3>
+                    <div class="flex flex-col md:flex-row gap-4 justify-center">
+                        <div class="bg-white dark:bg-darkmode-surface px-4 py-2 rounded-lg flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-600 flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-landmark text-islamic-600 dark:text-islamic-400"></i> Pemerintahan</div>
+                        <div class="bg-white dark:bg-darkmode-surface px-4 py-2 rounded-lg flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-600 flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-coins text-gold-500"></i> Ekonomi</div>
+                        <div class="bg-white dark:bg-darkmode-surface px-4 py-2 rounded-lg flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-600 flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-users text-blue-500"></i> Sosial</div>
+                    </div>
+                    <p class="text-xs text-center mt-4 text-slate-500 dark:text-slate-400">Ketiganya dipandang tidak dapat dipisahkan dalam membangun kesejahteraan masyarakat yang utuh.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Kuis -->
+        <section id="slide-6" class="slide-container slide-hidden h-full w-full absolute top-0 left-0 p-4 md:p-8 custom-scrollbar overflow-y-auto flex flex-col justify-center items-center">
+            
+            <div class="w-full max-w-2xl">
+                <div class="text-center mb-6">
+                    <span class="bg-islamic-100 dark:bg-islamic-900/50 text-islamic-800 dark:text-islamic-300 px-4 py-1 rounded-full text-xs font-bold tracking-wide uppercase border border-islamic-200 dark:border-islamic-700">Evaluasi Pemahaman</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mt-3">Kuis Interaktif</h2>
+                </div>
+
+                <div id="quiz-container" class="bg-white dark:bg-darkmode-surface p-6 rounded-2xl shadow-xl border border-slate-200 dark:border-darkmode-border relative overflow-hidden transition-colors duration-300">
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-100 dark:bg-slate-700 h-1 absolute top-0 left-0">
+                        <div id="quiz-progress" class="bg-islamic-500 dark:bg-islamic-400 h-1 transition-all duration-300" style="width: 0%"></div>
+                    </div>
+
+                    <div id="quiz-content">
+                        <!-- Quiz gets injected here -->
+                        <div class="text-center py-10">
+                            <p class="text-slate-600 dark:text-slate-400 mb-6">Uji pemahaman Anda dari materi slide sebelumnya.</p>
+                            <button onclick="startQuiz()" class="bg-islamic-600 text-white font-bold py-3 px-8 rounded-full hover:bg-islamic-700 dark:hover:bg-islamic-500 transition shadow-lg shadow-islamic-500/30 play-click">
+                                Mulai Kuis Sekarang <i class="fa-solid fa-play ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Bottom Controls -->
+    <footer class="h-16 w-full bg-white dark:bg-darkmode-surface border-t border-slate-200 dark:border-darkmode-border flex justify-between items-center px-4 md:px-8 z-50 shrink-0 transition-colors duration-300">
+        <button id="prevBtn" class="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-islamic-600 dark:hover:text-islamic-400 font-semibold px-4 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition disabled:opacity-30 disabled:hover:bg-transparent play-click" onclick="navigateSlide(-1)">
+            <i class="fa-solid fa-chevron-left"></i> <span class="hidden md:inline">Sebelumnya</span>
+        </button>
+        
+        <div class="flex items-center gap-2">
+            <!-- Dot Indicators will be generated via JS -->
+            <div id="dot-container" class="flex gap-2"></div>
+        </div>
+
+        <button id="nextBtn" class="flex items-center gap-2 bg-islamic-600 text-white hover:bg-islamic-700 font-semibold px-4 py-2 rounded-lg transition shadow-md disabled:opacity-30 play-click" onclick="navigateSlide(1)">
+            <span class="hidden md:inline">Selanjutnya</span> <span class="md:hidden">Next</span> <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </footer>
+
+    <!-- JavaScript Module -->
+    <script>
+        // --- 1. THEME ENGINE (Dark Mode) ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            playSound('hover'); // Beri efek suara kecil saat ganti tema
+        }
+
+        // --- 2. SOUND ENGINE (Web Audio API) ---
+        let audioCtx = null;
+        let soundEnabled = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundToggle');
+            if (soundEnabled) {
+                initAudio();
+                btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> <span class="hidden md:inline">Suara On</span>';
+                btn.classList.add('bg-islamic-100', 'dark:bg-islamic-900/50', 'text-islamic-700', 'dark:text-islamic-300');
+                btn.classList.remove('bg-slate-100', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-200');
+                playSound('success');
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i> <span class="hidden md:inline">Suara Off</span>';
+                btn.classList.remove('bg-islamic-100', 'dark:bg-islamic-900/50', 'text-islamic-700', 'dark:text-islamic-300');
+                btn.classList.add('bg-slate-100', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-200');
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled || !audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'hover') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                gainNode.gain.setValueAtTime(0.03, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'click' || type === 'nav') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'success') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now); // A4
+                osc.frequency.setValueAtTime(554.37, now + 0.1); // C#5
+                osc.frequency.setValueAtTime(659.25, now + 0.2); // E5
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+        }
+
+        // Attach sounds to UI elements globally
+        document.addEventListener('click', (e) => {
+            if(e.target.closest('.play-click')) {
+                initAudio();
+                playSound('nav');
+            }
+        });
+
+        // --- 3. SLIDER ENGINE ---
+        let currentSlideIndex = 0;
+        const totalSlides = 7; // Slide 0 to 6
+
+        function initSlider() {
+            const dotContainer = document.getElementById('dot-container');
+            dotContainer.innerHTML = '';
+            for(let i=0; i<totalSlides; i++){
+                const dot = document.createElement('div');
+                dot.className = `w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all duration-300 ${i === 0 ? 'bg-islamic-600 dark:bg-islamic-400 w-4 md:w-6' : 'bg-slate-300 dark:bg-slate-600'}`;
+                dot.id = `dot-${i}`;
+                dotContainer.appendChild(dot);
+            }
+            updateSliderUI();
+        }
+
+        function navigateSlide(direction) {
+            const newIndex = currentSlideIndex + direction;
+            if(newIndex >= 0 && newIndex < totalSlides) {
+                // Hide current
+                const currentSlide = document.getElementById(`slide-${currentSlideIndex}`);
+                currentSlide.classList.remove('slide-visible');
+                currentSlide.classList.add('slide-hidden');
+                
+                // Show new
+                currentSlideIndex = newIndex;
+                const nextSlide = document.getElementById(`slide-${currentSlideIndex}`);
+                nextSlide.classList.remove('slide-hidden');
+                nextSlide.classList.add('slide-visible');
+                // Scroll to top of the slide container automatically
+                nextSlide.scrollTop = 0; 
+
+                updateSliderUI();
+            }
+        }
+
+        function updateSliderUI() {
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentSlideIndex === 0;
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentSlideIndex === totalSlides - 1) {
+                nextBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span class="hidden md:inline">Selesai</span>';
+                nextBtn.classList.replace('bg-islamic-600', 'bg-gold-500');
+                nextBtn.classList.replace('hover:bg-islamic-700', 'hover:bg-gold-600');
+            } else {
+                nextBtn.innerHTML = '<span class="hidden md:inline">Selanjutnya</span> <span class="md:hidden">Next</span> <i class="fa-solid fa-chevron-right"></i>';
+                nextBtn.classList.replace('bg-gold-500', 'bg-islamic-600');
+                nextBtn.classList.replace('hover:bg-gold-600', 'hover:bg-islamic-700');
+            }
+
+            // Update dots
+            for(let i=0; i<totalSlides; i++){
+                const dot = document.getElementById(`dot-${i}`);
+                if(i === currentSlideIndex) {
+                    dot.className = 'w-4 md:w-6 h-2 md:h-2.5 rounded-full transition-all duration-300 bg-islamic-600 dark:bg-islamic-400';
+                } else {
+                    dot.className = 'w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all duration-300 bg-slate-300 dark:bg-slate-600';
+                }
+            }
+        }
+
+        // --- 4. QUIZ LOGIC ---
+        const questions = [
+            {
+                q: "Apa perbedaan paling mendasar antara Ilmu Ekonomi dan Sistem Ekonomi?",
+                options: [
+                    "Ilmu mengatur solusi, Sistem membaca fakta",
+                    "Ilmu tentang akuntansi, Sistem tentang perbankan",
+                    "Ilmu mempelajari diagnosis fakta, Sistem menentukan solusi"
+                ],
+                correct: 2,
+                explanation: "Ilmu bersifat universal membaca fakta, Sistem Ekonomi dipengaruhi Aqidah untuk menawarkan solusi."
+            },
+            {
+                q: "Menurut materi, apa akar masalah ekonomi dalam pandangan Kapitalisme?",
+                options: [
+                    "Kebutuhan manusia tidak terbatas vs sumber daya terbatas",
+                    "Distribusi yang tidak merata",
+                    "Kurangnya teknologi canggih"
+                ],
+                correct: 0,
+                explanation: "Kapitalisme fokus pada kelangkaan, sehingga solusinya memacu produksi."
+            },
+            {
+                q: "Dalam Ekonomi Islam, titik berat (fokus utama) penyelesaian masalah ekonomi ada pada:",
+                options: [
+                    "Produksi massal",
+                    "Distribusi kekayaan",
+                    "Ekspor Impor"
+                ],
+                correct: 1,
+                explanation: "Islam melihat barang menumpuk pada segelintir orang, maka fokusnya adalah mengatur distribusi."
+            },
+            {
+                q: "Berikut ini adalah tiga jenis kepemilikan dalam sistem ekonomi Islam, KECUALI:",
+                options: [
+                    "Kepemilikan Swasta Monopoli",
+                    "Kepemilikan Umum",
+                    "Kepemilikan Negara"
+                ],
+                correct: 0,
+                explanation: "Islam membagi kepemilikan: Individu, Umum, dan Negara. Monopoli dilarang."
+            },
+            {
+                q: "Mengapa syariat mengatur tentang hukum waris dan jual beli, tetapi tidak mengatur teknologi produksi (bertani)?",
+                options: [
+                    "Karena syariat hanya ritual",
+                    "Karena produksi adalah wilayah akal manusia, syariat mengatur interaksi dan keadilan",
+                    "Karena teknologi tidak penting"
+                ],
+                correct: 1,
+                explanation: "Akal terus berkembang untuk teknologi. Syariat turun karena akal manusia tidak pernah selesai mendefinisikan 'keadilan'."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        const quizContent = document.getElementById('quiz-content');
+        const progressBar = document.getElementById('quiz-progress');
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, index) => {
+                optionsHtml += `
+                    <label class="block relative cursor-pointer group play-click mb-3">
+                        <input type="radio" name="quiz-option" value="${index}" class="peer sr-only">
+                        <div class="p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 group-hover:border-islamic-300 dark:group-hover:border-islamic-600 transition-all text-slate-700 dark:text-slate-200 text-sm md:text-base">
+                            <span class="font-medium">${opt}</span>
+                        </div>
+                    </label>
+                `;
+            });
+
+            quizContent.innerHTML = `
+                <div class="mb-5 text-left">
+                    <span class="text-xs font-bold text-slate-400 dark:text-slate-500 mb-1 block">Pertanyaan ${currentQuestionIndex + 1} dari ${questions.length}</span>
+                    <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white leading-snug">${q.q}</h3>
+                </div>
+                <div class="space-y-2 mb-6 text-left">
+                    ${optionsHtml}
+                </div>
+                <button onclick="checkAnswer()" class="w-full bg-islamic-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-islamic-700 transition play-click">
+                    Jawab <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            `;
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="quiz-option"]:checked');
+            if (!selected) {
+                // Jangan gunakan alert bawaan browser untuk UI modern
+                quizContent.insertAdjacentHTML('beforeend', '<p class="text-red-500 text-sm mt-2 font-bold animate-pulse" id="warningMsg">Pilih salah satu jawaban terlebih dahulu!</p>');
+                setTimeout(() => { const w = document.getElementById('warningMsg'); if(w) w.remove(); }, 2000);
+                playSound('error');
+                return;
+            }
+
+            const answerIndex = parseInt(selected.value);
+            const q = questions[currentQuestionIndex];
+            const isCorrect = answerIndex === q.correct;
+
+            if (isCorrect) {
+                score++;
+                playSound('success');
+            } else {
+                playSound('error');
+            }
+
+            // Show feedback inline
+            quizContent.innerHTML = `
+                <div class="text-center py-4">
+                    <div class="text-4xl md:text-5xl mb-3 ${isCorrect ? 'text-green-500' : 'text-red-500'}">
+                        <i class="fa-solid ${isCorrect ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">
+                        ${isCorrect ? 'Tepat Sekali!' : 'Kurang Tepat'}
+                    </h3>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm mb-6 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg text-left border-l-4 ${isCorrect ? 'border-green-500' : 'border-red-500'}">
+                        <strong>Penjelasan:</strong><br>${q.explanation}
+                    </p>
+                    <button onclick="nextQuestion()" class="w-full bg-islamic-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-islamic-700 transition play-click">
+                        Lanjut <i class="fa-solid fa-forward ml-2"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            progressBar.style.width = '100%';
+            playSound('success');
+            
+            let message = "";
+            let icon = "";
+            if (score === questions.length) {
+                message = "Luar Biasa! Pemahaman Anda sangat komprehensif.";
+                icon = "fa-trophy text-gold-500";
+            } else if (score >= 3) {
+                message = "Bagus! Anda memahami konsep dasar dengan baik.";
+                icon = "fa-medal text-islamic-500";
+            } else {
+                message = "Mari pelajari materinya lagi untuk pemahaman yang lebih kuat.";
+                icon = "fa-book-open text-blue-500";
+            }
+
+            quizContent.innerHTML = `
+                <div class="text-center py-6">
+                    <div class="text-5xl mb-4"><i class="fa-solid ${icon}"></i></div>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Kuis Selesai!</h2>
+                    <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 mb-6">${message}</p>
+                    
+                    <div class="inline-block bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 md:p-6 mb-6 border border-slate-200 dark:border-slate-700">
+                        <span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Skor Anda</span>
+                        <span class="text-4xl font-extrabold text-islamic-600 dark:text-islamic-400">${score}</span><span class="text-xl text-slate-400 font-bold">/${questions.length}</span>
+                    </div>
+
+                    <div>
+                        <button onclick="startQuiz()" class="bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold py-2 px-6 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition play-click text-sm">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initSlider();
+        });
+    </script>
+</body>
+</html>
